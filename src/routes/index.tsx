@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import heroVideo from "@/assets/hero-video.asset.json";
 import showcaseVideo from "@/assets/showcase-video.asset.json";
-import logo from "@/assets/logo.asset.json";
+
 import { AutoVideo } from "@/components/auto-video";
 import { ProductCard } from "@/components/product-card";
 import { collectionsQuery, productsQuery } from "@/lib/store";
@@ -42,8 +42,8 @@ function Home() {
           className="absolute inset-0 size-full object-cover opacity-60"
         />
         <div className="relative z-10 flex size-full flex-col items-center justify-center px-6 text-center">
-          <img src={logo.url} alt="iGadgets" className="h-24 w-auto invert sm:h-32" />
-          <h1 className="mt-6 max-w-3xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-background sm:text-6xl">
+          <h1 className="max-w-3xl text-4xl font-black uppercase leading-[0.95] tracking-tight text-background sm:text-6xl">
+
             Gear that keeps up with your iPhone
           </h1>
           <p className="mt-4 max-w-xl text-sm text-background/70">
