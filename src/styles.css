@@ -132,6 +132,34 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+:root {
+  --radius: 0rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.13 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.13 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0 0);
+  --primary: oklch(0.13 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.13 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.13 0 0);
+  --destructive: oklch(0.3 0 0);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
+  --ring: oklch(0.13 0 0);
+}
+
+@theme inline {
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -140,5 +168,18 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-foreground);
+    color: var(--color-background);
   }
 }
+
+#lovable-badge,
+[id="lovable-badge"] {
+  display: none !important;
+}
+
