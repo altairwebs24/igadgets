@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CollectionsAdmin } from "@/components/admin/collections-admin";
 import { ProductsAdmin } from "@/components/admin/products-admin";
 import { InsightsAdmin } from "@/components/admin/insights-admin";
-import { formatPrice } from "@/lib/cart";
+import { OrdersAdmin } from "@/components/admin/orders-admin";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
