@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 export type CartItem = {
+  /** product id + selected options, so variants are separate lines */
   id: string;
+  productId: string;
   name: string;
   slug: string;
   price: number;
   image: string | null;
+  variantLabel: string | null;
   quantity: number;
 };
 
@@ -21,7 +24,7 @@ type CartContextValue = {
   setOpen: (open: boolean) => void;
 };
 
-const STORAGE_KEY = "igadgets.cart.v1";
+const STORAGE_KEY = "igadgets.cart.v2";
 
 const CartContext = createContext<CartContextValue | null>(null);
 
@@ -85,6 +88,8 @@ export function useCart() {
   if (!context) throw new Error("useCart must be used inside CartProvider");
   return context;
 }
+
+export const DELIVERY_FEE = 99;
 
 export function formatPrice(value: number) {
   return new Intl.NumberFormat("en-ZA", {

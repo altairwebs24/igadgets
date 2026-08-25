@@ -19,6 +19,16 @@ export type ProductMedia = {
   sort_order: number;
 };
 
+export type ProductVariant = {
+  id: string;
+  product_id: string;
+  option_name: string;
+  option_value: string;
+  price_delta: number;
+  stock: number;
+  sort_order: number;
+};
+
 export type Product = {
   id: string;
   name: string;
@@ -31,17 +41,31 @@ export type Product = {
   is_active: boolean;
   sort_order: number;
   product_media: ProductMedia[];
+  product_variants?: ProductVariant[];
   product_collections?: { collection_id: string }[];
 };
 
 const PRODUCT_SELECT =
-  "id,name,slug,description,price,compare_at_price,stock,is_featured,is_active,sort_order,product_media(id,product_id,url,media_type,alt_text,is_primary,sort_order),product_collections(collection_id)";
+  "id,name,slug,description,price,compare_at_price,stock,is_featured,is_active,sort_order,product_media(id,product_id,url,media_type,alt_text,is_primary,sort_order),product_variants(id,product_id,option_name,option_value,price_delta,stock,sort_order),product_collections(collection_id)";
 
 export function primaryImage(product: Pick<Product, "product_media">) {
   const media = [...(product.product_media ?? [])].sort(
     (a, b) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order,
   );
   return media.find((entry) => entry.media_type === "image")?.url ?? media[0]?.url ?? null;
+}
+
+/** Groups flat variant rows into option groups, e.g. Colour -> [Black, White]. */
+export function variantGroups(product: Pick<Product, "product_variants">) {
+  const groups = new Map<string, ProductVariant[]>();
+  for (const variant of [...(product.product_variants ?? [])].sort(
+    (a, b) => a.sort_order - b.sort_order,
+  )) {
+    const existing = groups.get(variant.option_name) ?? [];
+    existing.push(variant);
+    groups.set(variant.option_name, existing);
+  }
+  return [...groups.entries()].map(([name, options]) => ({ name, options }));
 }
 
 export const collectionsQuery = {
@@ -92,8 +116,10 @@ export function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-const TEN_YEARS = 60 * 60 * 24 * 365 * 10;
-
+/**
+ * Uploads to the private bucket and returns a permanent, token-free URL served
+ * by /api/public/media/* so media keeps working on every deployment.
+ */
 export async function uploadProductMedia(file: File) {
   const ext = file.name.split(".").pop() ?? "bin";
   const path = `${crypto.randomUUID()}.${ext}`;
@@ -102,12 +128,9 @@ export async function uploadProductMedia(file: File) {
     upsert: false,
   });
   if (error) throw error;
-  const { data, error: signedError } = await supabase.storage
-    .from("product-media")
-    .createSignedUrl(path, TEN_YEARS);
-  if (signedError) throw signedError;
   return {
-    url: data.signedUrl,
+    url: `/api/public/media/${path}`,
+    storage_path: path,
     media_type: file.type.startsWith("video") ? "video" : "image",
   };
 }
