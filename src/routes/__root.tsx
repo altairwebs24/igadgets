@@ -16,6 +16,7 @@ import { CartDrawer } from "@/components/cart-drawer";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
+import { trackVisit } from "@/lib/track-visit";
 
 function NotFoundComponent() {
   return (
@@ -123,6 +124,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    void trackVisit(window.location.pathname);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

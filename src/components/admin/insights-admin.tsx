@@ -30,6 +30,19 @@ export function InsightsAdmin() {
     },
   });
 
+  const { data: visits = [] } = useQuery({
+    queryKey: ["insights-visits"],
+    queryFn: async (): Promise<{ session_id: string; created_at: string }[]> => {
+      const { data, error } = await supabase
+        .from("site_visits")
+        .select("session_id,created_at")
+        .order("created_at", { ascending: false })
+        .limit(5000);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   const { data: items = [] } = useQuery({
     queryKey: ["insights-items"],
     queryFn: async (): Promise<ItemRow[]> => {
@@ -75,7 +88,19 @@ export function InsightsAdmin() {
     .sort((a, b) => a.stock - b.stock)
     .slice(0, 5);
 
+  const visitors = new Set(visits.map((visit) => visit.session_id)).size;
+  const visitors30 = new Set(
+    visits
+      .filter((visit) => new Date(visit.created_at).getTime() >= since)
+      .map((visit) => visit.session_id),
+  ).size;
+  const visitToOrder = visitors ? (orders.length / visitors) * 100 : 0;
+
   const cards = [
+    { label: "Site visitors", value: String(visitors) },
+    { label: "Visitors (30 days)", value: String(visitors30) },
+    { label: "Page opens", value: String(visits.length) },
+    { label: "Visit → order rate", value: `${visitToOrder.toFixed(1)}%` },
     { label: "Revenue (paid)", value: formatPrice(revenue) },
     { label: "Last 30 days", value: formatPrice(revenue30) },
     { label: "Paid orders", value: String(paid.length) },
