@@ -55,6 +55,7 @@ export type Database = {
           product_id: string | null
           quantity: number
           unit_price: number
+          variant_label: string | null
         }
         Insert: {
           id?: string
@@ -63,6 +64,7 @@ export type Database = {
           product_id?: string | null
           quantity?: number
           unit_price?: number
+          variant_label?: string | null
         }
         Update: {
           id?: string
@@ -71,6 +73,7 @@ export type Database = {
           product_id?: string | null
           quantity?: number
           unit_price?: number
+          variant_label?: string | null
         }
         Relationships: [
           {
@@ -93,35 +96,56 @@ export type Database = {
         Row: {
           address: string | null
           created_at: string
+          currency: string
+          delivery_fee: number
           email: string | null
+          free_delivery: boolean
           full_name: string | null
           id: string
+          paid_at: string | null
+          payment_status: string
           phone: string | null
           status: string
           total: number
           user_id: string | null
+          yoco_checkout_id: string | null
+          yoco_payment_id: string | null
         }
         Insert: {
           address?: string | null
           created_at?: string
+          currency?: string
+          delivery_fee?: number
           email?: string | null
+          free_delivery?: boolean
           full_name?: string | null
           id?: string
+          paid_at?: string | null
+          payment_status?: string
           phone?: string | null
           status?: string
           total?: number
           user_id?: string | null
+          yoco_checkout_id?: string | null
+          yoco_payment_id?: string | null
         }
         Update: {
           address?: string | null
           created_at?: string
+          currency?: string
+          delivery_fee?: number
           email?: string | null
+          free_delivery?: boolean
           full_name?: string | null
           id?: string
+          paid_at?: string | null
+          payment_status?: string
           phone?: string | null
           status?: string
           total?: number
           user_id?: string | null
+          yoco_checkout_id?: string | null
+          yoco_payment_id?: string | null
         }
         Relationships: []
       }
@@ -164,6 +188,7 @@ export type Database = {
           media_type: string
           product_id: string
           sort_order: number
+          storage_path: string | null
           url: string
         }
         Insert: {
@@ -174,6 +199,7 @@ export type Database = {
           media_type?: string
           product_id: string
           sort_order?: number
+          storage_path?: string | null
           url: string
         }
         Update: {
@@ -184,11 +210,53 @@ export type Database = {
           media_type?: string
           product_id?: string
           sort_order?: number
+          storage_path?: string | null
           url?: string
         }
         Relationships: [
           {
             foreignKeyName: "product_media_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_variants: {
+        Row: {
+          created_at: string
+          id: string
+          option_name: string
+          option_value: string
+          price_delta: number
+          product_id: string
+          sort_order: number
+          stock: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          option_name: string
+          option_value: string
+          price_delta?: number
+          product_id: string
+          sort_order?: number
+          stock?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          option_name?: string
+          option_value?: string
+          price_delta?: number
+          product_id?: string
+          sort_order?: number
+          stock?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
