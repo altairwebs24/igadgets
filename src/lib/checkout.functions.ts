@@ -165,7 +165,7 @@ export const confirmOrder = createServerFn({ method: "POST" })
     const checkout = (await response.json()) as {
       status?: string;
       paymentId?: string;
-functions: never;
+
     };
     const paid = (checkout.status ?? "").toLowerCase() === "completed";
     if (paid) {
