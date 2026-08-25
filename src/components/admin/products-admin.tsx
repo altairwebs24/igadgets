@@ -56,7 +56,22 @@ export function ProductsAdmin() {
   });
 
   const update = useMutation({
-    mutationFn: async ({ id, values }: { id: string; values: Record<string, unknown> }) => {
+    mutationFn: async ({
+      id,
+      values,
+    }: {
+      id: string;
+      values: Partial<{
+        name: string;
+        slug: string;
+        description: string | null;
+        price: number;
+        compare_at_price: number | null;
+        stock: number;
+        is_active: boolean;
+        is_featured: boolean;
+      }>;
+    }) => {
       const { error } = await supabase.from("products").update(values).eq("id", id);
       if (error) throw error;
     },

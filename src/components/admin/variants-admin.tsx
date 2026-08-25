@@ -47,7 +47,13 @@ export function VariantsAdmin({ product }: { product: Product }) {
   });
 
   const update = useMutation({
-    mutationFn: async ({ id, values }: { id: string; values: Record<string, unknown> }) => {
+    mutationFn: async ({
+      id,
+      values,
+    }: {
+      id: string;
+      values: Partial<{ option_name: string; option_value: string; price_delta: number; stock: number }>;
+    }) => {
       const { error } = await supabase.from("product_variants").update(values).eq("id", id);
       if (error) throw error;
     },
