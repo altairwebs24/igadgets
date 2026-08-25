@@ -49,18 +49,6 @@ function AdminPage() {
     }
   }, [isLoading, session, navigate]);
 
-  const { data: orders = [] } = useQuery({
-    queryKey: ["orders"],
-    enabled: Boolean(session?.isAdmin),
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("orders")
-        .select("id,email,full_name,total,status,created_at")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
 
   if (isLoading) {
     return <p className="mx-auto max-w-7xl px-4 py-20 text-sm text-muted-foreground">Loading…</p>;
