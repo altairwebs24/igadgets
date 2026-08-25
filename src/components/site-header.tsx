@@ -2,8 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
-
-import logo from "@/assets/logo.asset.json";
 import { collectionsQuery } from "@/lib/store";
 import { useCart } from "@/lib/cart";
 
@@ -24,7 +22,7 @@ export function SiteHeader() {
         </button>
 
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo.url} alt="iGadgets" className="h-9 w-auto dark:invert" />
+          <img src={/logo.jpg} alt="iGadgets" className="h-9 w-auto dark:invert" />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
