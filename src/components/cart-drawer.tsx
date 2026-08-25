@@ -37,6 +37,11 @@ export function CartDrawer() {
                     >
                       {item.name}
                     </Link>
+                    {item.variantLabel ? (
+                      <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                        {item.variantLabel}
+                      </p>
+                    ) : null}
                     <p className="mt-1 text-sm">{formatPrice(item.price)}</p>
                     <div className="mt-3 flex items-center gap-3">
                       <div className="flex items-center border border-border">
@@ -83,12 +88,13 @@ export function CartDrawer() {
           >
             View bag
           </Link>
-          <button
-            disabled
-            className="mt-2 h-12 w-full cursor-not-allowed border border-border text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground"
+          <Link
+            to="/checkout"
+            onClick={() => setOpen(false)}
+            className="mt-2 flex h-12 items-center justify-center border border-foreground text-xs font-semibold uppercase tracking-[0.3em]"
           >
-            Checkout — coming soon
-          </button>
+            Checkout
+          </Link>
         </div>
       </SheetContent>
     </Sheet>
