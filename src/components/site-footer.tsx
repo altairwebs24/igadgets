@@ -26,6 +26,9 @@ export function SiteFooter() {
             <li>
               <Link to="/cart">Cart</Link>
             </li>
+            <li>
+              <Link to="/track">Track your order</Link>
+            </li>
           </ul>
         </div>
         <div className="text-sm">

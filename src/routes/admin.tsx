@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CollectionsAdmin } from "@/components/admin/collections-admin";
 import { ProductsAdmin } from "@/components/admin/products-admin";
 import { InsightsAdmin } from "@/components/admin/insights-admin";
-import { formatPrice } from "@/lib/cart";
+import { OrdersAdmin } from "@/components/admin/orders-admin";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -49,18 +49,6 @@ function AdminPage() {
     }
   }, [isLoading, session, navigate]);
 
-  const { data: orders = [] } = useQuery({
-    queryKey: ["orders"],
-    enabled: Boolean(session?.isAdmin),
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("orders")
-        .select("id,email,full_name,total,status,created_at")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
 
   if (isLoading) {
     return <p className="mx-auto max-w-7xl px-4 py-20 text-sm text-muted-foreground">Loading…</p>;
@@ -123,22 +111,7 @@ function AdminPage() {
         {tab === "insights" && <InsightsAdmin />}
         {tab === "products" && <ProductsAdmin />}
         {tab === "collections" && <CollectionsAdmin />}
-        {tab === "orders" &&
-          (orders.length === 0 ? (
-            <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-              No orders yet — orders appear here once payments are live.
-            </p>
-          ) : (
-            <ul className="divide-y divide-border border border-border">
-              {orders.map((order) => (
-                <li key={order.id} className="flex flex-wrap justify-between gap-3 p-4 text-sm">
-                  <span>{order.full_name ?? order.email ?? "Guest"}</span>
-                  <span className="text-muted-foreground">{order.status}</span>
-                  <span className="font-semibold">{formatPrice(Number(order.total))}</span>
-                </li>
-              ))}
-            </ul>
-          ))}
+        {tab === "orders" && <OrdersAdmin />}
       </div>
     </div>
   );
