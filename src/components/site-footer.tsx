@@ -1,13 +1,10 @@
 import { Link } from "@tanstack/react-router";
-
-import logo from "@/assets/logo.asset.json";
-
 export function SiteFooter() {
   return (
     <footer className="mt-24 border-t border-border bg-foreground text-background">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
         <div>
-          <img src={logo.url} alt="iGadgets" className="h-12 w-auto invert" />
+          <img src="/logo.jpg" alt="iGadgets" className="h-12 w-auto invert" />
           <p className="mt-4 max-w-xs text-sm text-background/70">
             The iPhone accessory store. Cases, power and cables built to last.
           </p>
