@@ -111,22 +111,7 @@ function AdminPage() {
         {tab === "insights" && <InsightsAdmin />}
         {tab === "products" && <ProductsAdmin />}
         {tab === "collections" && <CollectionsAdmin />}
-        {tab === "orders" &&
-          (orders.length === 0 ? (
-            <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-              No orders yet — orders appear here once payments are live.
-            </p>
-          ) : (
-            <ul className="divide-y divide-border border border-border">
-              {orders.map((order) => (
-                <li key={order.id} className="flex flex-wrap justify-between gap-3 p-4 text-sm">
-                  <span>{order.full_name ?? order.email ?? "Guest"}</span>
-                  <span className="text-muted-foreground">{order.status}</span>
-                  <span className="font-semibold">{formatPrice(Number(order.total))}</span>
-                </li>
-              ))}
-            </ul>
-          ))}
+        {tab === "orders" && <OrdersAdmin />}
       </div>
     </div>
   );
