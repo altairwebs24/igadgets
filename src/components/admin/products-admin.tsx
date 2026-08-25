@@ -12,6 +12,7 @@ import {
   type Product,
 } from "@/lib/store";
 import { formatPrice } from "@/lib/cart";
+import { VariantsAdmin } from "@/components/admin/variants-admin";
 
 const emptyDraft = {
   name: "",
@@ -111,6 +112,7 @@ export function ProductsAdmin() {
         const { error } = await supabase.from("product_media").insert({
           product_id: product.id,
           url: uploaded.url,
+          storage_path: uploaded.storage_path,
           media_type: uploaded.media_type,
           alt_text: product.name,
           is_primary: order === 0 && uploaded.media_type === "image",
@@ -345,6 +347,8 @@ export function ProductsAdmin() {
                       ))}
                     </div>
                   </div>
+
+                  <VariantsAdmin product={product} />
 
                   <div>
                     <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
