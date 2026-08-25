@@ -14,6 +14,8 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as CheckoutIndexRouteImport } from './routes/checkout.index'
+import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as CollectionsIndexRouteImport } from './routes/collections.index'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
@@ -44,6 +46,16 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
+  id: '/checkout/',
+  path: '/checkout/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
+  id: '/checkout/success',
+  path: '/checkout/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CollectionsIndexRoute = CollectionsIndexRouteImport.update({
   id: '/collections/',
   path: '/collections/',
@@ -71,8 +83,10 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/search': typeof SearchRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/checkout/': typeof CheckoutIndexRoute
   '/collections/': typeof CollectionsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -82,8 +96,10 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/search': typeof SearchRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/checkout': typeof CheckoutIndexRoute
   '/collections': typeof CollectionsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -94,8 +110,10 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/search': typeof SearchRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/checkout/': typeof CheckoutIndexRoute
   '/collections/': typeof CollectionsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -107,8 +125,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/search'
+    | '/checkout/success'
     | '/collections/$slug'
     | '/product/$slug'
+    | '/checkout/'
     | '/collections/'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
@@ -118,8 +138,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/search'
+    | '/checkout/success'
     | '/collections/$slug'
     | '/product/$slug'
+    | '/checkout'
     | '/collections'
     | '/api/public/media/$'
   id:
@@ -129,8 +151,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/search'
+    | '/checkout/success'
     | '/collections/$slug'
     | '/product/$slug'
+    | '/checkout/'
     | '/collections/'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
@@ -141,8 +165,10 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   SearchRoute: typeof SearchRoute
+  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
+  CheckoutIndexRoute: typeof CheckoutIndexRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
@@ -184,6 +210,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/': {
+      id: '/checkout/'
+      path: '/checkout'
+      fullPath: '/checkout/'
+      preLoaderRoute: typeof CheckoutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/collections/': {
       id: '/collections/'
       path: '/collections'
@@ -221,8 +261,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   SearchRoute: SearchRoute,
+  CheckoutSuccessRoute: CheckoutSuccessRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
   ProductSlugRoute: ProductSlugRoute,
+  CheckoutIndexRoute: CheckoutIndexRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }

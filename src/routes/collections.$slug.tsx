@@ -64,7 +64,7 @@ function CollectionPage() {
           Nothing in this collection yet.
         </p>
       ) : (
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {items.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

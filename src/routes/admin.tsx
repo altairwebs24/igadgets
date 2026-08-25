@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CollectionsAdmin } from "@/components/admin/collections-admin";
 import { ProductsAdmin } from "@/components/admin/products-admin";
+import { InsightsAdmin } from "@/components/admin/insights-admin";
 import { formatPrice } from "@/lib/cart";
 
 export const Route = createFileRoute("/admin")({
@@ -21,13 +22,13 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-const TABS = ["products", "collections", "orders"] as const;
+const TABS = ["insights", "products", "collections", "orders"] as const;
 type Tab = (typeof TABS)[number];
 
 function AdminPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState<Tab>("products");
+  const [tab, setTab] = useState<Tab>("insights");
 
   const { data: session, isLoading } = useQuery({
     queryKey: ["admin-session"],
@@ -119,6 +120,7 @@ function AdminPage() {
       </div>
 
       <div className="mt-10">
+        {tab === "insights" && <InsightsAdmin />}
         {tab === "products" && <ProductsAdmin />}
         {tab === "collections" && <CollectionsAdmin />}
         {tab === "orders" &&

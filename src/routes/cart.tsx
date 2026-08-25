@@ -54,6 +54,11 @@ function CartPage() {
                     >
                       {item.name}
                     </Link>
+                    {item.variantLabel ? (
+                      <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                        {item.variantLabel}
+                      </p>
+                    ) : null}
                     <p className="mt-1 text-sm text-muted-foreground">{formatPrice(item.price)}</p>
                     <div className="mt-3 flex items-center gap-4">
                       <div className="flex items-center border border-border">
@@ -93,12 +98,15 @@ function CartPage() {
               <span className="text-[11px] uppercase tracking-[0.3em]">Subtotal</span>
               <span>{formatPrice(subtotal)}</span>
             </div>
-            <button
-              disabled
-              className="h-14 w-full max-w-sm cursor-not-allowed border border-border text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground"
+            <p className="w-full max-w-sm text-right text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+              Free delivery on your first order
+            </p>
+            <Link
+              to="/checkout"
+              className="flex h-14 w-full max-w-sm items-center justify-center bg-foreground text-[11px] font-semibold uppercase tracking-[0.3em] text-background"
             >
-              Checkout — payments coming soon
-            </button>
+              Checkout
+            </Link>
             <button
               onClick={clear}
               className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground underline"
