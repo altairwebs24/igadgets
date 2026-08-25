@@ -22,7 +22,7 @@ export function SiteHeader() {
         </button>
 
         <Link to="/" className="flex items-center gap-2">
-          <img src={/logo.jpg} alt="iGadgets" className="h-9 w-auto dark:invert" />
+          <img src="/logo.jpg" alt="iGadgets" className="h-9 w-auto dark:invert" />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
