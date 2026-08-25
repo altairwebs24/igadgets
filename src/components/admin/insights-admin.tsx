@@ -30,6 +30,19 @@ export function InsightsAdmin() {
     },
   });
 
+  const { data: visits = [] } = useQuery({
+    queryKey: ["insights-visits"],
+    queryFn: async (): Promise<{ session_id: string; created_at: string }[]> => {
+      const { data, error } = await supabase
+        .from("site_visits")
+        .select("session_id,created_at")
+        .order("created_at", { ascending: false })
+        .limit(5000);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   const { data: items = [] } = useQuery({
     queryKey: ["insights-items"],
     queryFn: async (): Promise<ItemRow[]> => {
