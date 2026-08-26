@@ -109,7 +109,7 @@ function Home() {
 
       <section className="mt-20 grid items-stretch gap-px bg-border md:grid-cols-2">
         <div className="relative min-h-[420px] overflow-hidden bg-foreground">
-          <AutoVideo src={showcaseVideo.mp4} className="absolute inset-0 size-full object-cover" />
+          <AutoVideo src={showcaseVideo.url} className="absolute inset-0 size-full object-cover" />
         </div>
         <div className="flex flex-col justify-center bg-background p-10 sm:p-16">
           <h2 className="text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl">
