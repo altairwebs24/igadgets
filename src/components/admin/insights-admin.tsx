@@ -15,7 +15,16 @@ type OrderRow = {
 
 type ItemRow = { name: string; quantity: number; unit_price: number; order_id: string };
 
+const RANGES = [
+  { label: "1 month", months: 1 },
+  { label: "3 months", months: 3 },
+  { label: "6 months", months: 6 },
+  { label: "12 months", months: 12 },
+] as const;
+
 export function InsightsAdmin() {
+  const [rangeMonths, setRangeMonths] = useState<number>(12);
+  const rangeLabel = RANGES.find((range) => range.months === rangeMonths)?.label ?? "12 months";
   const { data: products = [] } = useQuery(productsQuery);
 
   const { data: orders = [], isLoading } = useQuery({
