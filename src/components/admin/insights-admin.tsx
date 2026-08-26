@@ -125,9 +125,9 @@ export function InsightsAdmin() {
   const peak = Math.max(1, ...monthly.map((month) => month.visitors));
 
   const cards = [
-    { label: "Site visitors", value: String(visitors) },
+    { label: `Site visitors (${rangeLabel})`, value: String(visitors) },
     { label: "Visitors (30 days)", value: String(visitors30) },
-    { label: "Page opens", value: String(visits.length) },
+    { label: "Page opens", value: String(visitsInRange.length) },
     { label: "Visit → order rate", value: `${visitToOrder.toFixed(1)}%` },
     { label: "Revenue (paid)", value: formatPrice(revenue) },
     { label: "Last 30 days", value: formatPrice(revenue30) },
