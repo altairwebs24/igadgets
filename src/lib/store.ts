@@ -116,10 +116,7 @@ export function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-/**
- * Uploads to the private bucket and returns a permanent, token-free URL served
- * by /api/public/media/* so media keeps working on every deployment.
- */
+/** Uploads product media to the public bucket and returns its direct public URL. */
 export async function uploadProductMedia(file: File) {
   const ext = file.name.split(".").pop() ?? "bin";
   const path = `${crypto.randomUUID()}.${ext}`;
@@ -128,8 +125,9 @@ export async function uploadProductMedia(file: File) {
     upsert: false,
   });
   if (error) throw error;
+  const { data } = supabase.storage.from("product-media").getPublicUrl(path);
   return {
-    url: `/api/public/media/${path}`,
+    url: data.publicUrl,
     storage_path: path,
     media_type: file.type.startsWith("video") ? "video" : "image",
   };

@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import heroVideo from "@/assets/hero-video.asset.json";
-import showcaseVideo from "@/assets/showcase-video.asset.json";
-
 import { AutoVideo } from "@/components/auto-video";
 import { ProductCard } from "@/components/product-card";
 import { collectionsQuery, productsQuery } from "@/lib/store";
+
+const HERO_VIDEO_URL =
+  "https://lahomhwzwriqyeworovu.supabase.co/storage/v1/object/public/product-media/site%2Fhero.mp4";
+const SHOWCASE_VIDEO_URL =
+  "https://lahomhwzwriqyeworovu.supabase.co/storage/v1/object/public/product-media/site%2Fshowcase.mp4";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,7 +40,7 @@ function Home() {
     <div>
       <section className="relative h-[78vh] min-h-[520px] w-full overflow-hidden bg-foreground">
         <AutoVideo
-          src={heroVideo.mp4}
+          src={HERO_VIDEO_URL}
           className="absolute inset-0 size-full object-cover opacity-60"
         />
         <div className="relative z-10 flex size-full flex-col items-center justify-center px-6 text-center">
@@ -109,7 +111,7 @@ function Home() {
 
       <section className="mt-20 grid items-stretch gap-px bg-border md:grid-cols-2">
         <div className="relative min-h-[420px] overflow-hidden bg-foreground">
-          <AutoVideo src={showcaseVideo.url} className="absolute inset-0 size-full object-cover" />
+          <AutoVideo src={SHOWCASE_VIDEO_URL} className="absolute inset-0 size-full object-cover" />
         </div>
         <div className="flex flex-col justify-center bg-background p-10 sm:p-16">
           <h2 className="text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl">
