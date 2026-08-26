@@ -176,6 +176,26 @@ export function InsightsAdmin() {
         ))}
       </div>
 
+      <section className="border border-border">
+        <h3 className="border-b border-border p-4 text-[11px] font-semibold uppercase tracking-[0.3em]">
+          Website views — last {rangeLabel}
+        </h3>
+        <div className="flex items-end gap-2 overflow-x-auto p-6" style={{ height: 220 }}>
+          {monthly.map((month) => (
+            <div key={month.label} className="flex min-w-10 flex-1 flex-col items-center gap-2">
+              <span className="text-[10px] font-semibold">{month.visitors}</span>
+              <div
+                className="w-full bg-foreground"
+                style={{ height: `${Math.max(2, (month.visitors / peak) * 130)}px` }}
+              />
+              <span className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
+                {month.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <div className="grid gap-8 lg:grid-cols-2">
         <section className="border border-border">
           <h3 className="border-b border-border p-4 text-[11px] font-semibold uppercase tracking-[0.3em]">
