@@ -29,14 +29,20 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="flex items-start justify-between gap-3 border-t border-border p-4">
         <div>
           <h3 className="text-sm font-semibold">{product.name}</h3>
-          {product.stock <= 0 && (
-            <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              Sold out
+          {product.stock <= 0 ? (
+            <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-alert">Sold out</p>
+          ) : product.stock < 11 ? (
+            <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-alert">
+              Only {product.stock} left
             </p>
-          )}
+          ) : null}
         </div>
         <div className="text-right">
-          <p className="text-sm font-semibold">{formatPrice(Number(product.price))}</p>
+          <p
+            className={`text-sm font-semibold ${product.compare_at_price ? "text-alert" : ""}`}
+          >
+            {formatPrice(Number(product.price))}
+          </p>
           {product.compare_at_price ? (
             <p className="text-xs text-muted-foreground line-through">
               {formatPrice(Number(product.compare_at_price))}
@@ -44,6 +50,7 @@ export function ProductCard({ product }: { product: Product }) {
           ) : null}
         </div>
       </div>
+
     </Link>
   );
 }
