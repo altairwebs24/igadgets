@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 
 import { ProductCard } from "@/components/product-card";
@@ -159,34 +160,48 @@ function ProductPage() {
             {product.name}
           </h1>
           <div className="mt-4 flex items-baseline gap-3">
-            <span className="text-2xl font-semibold">{formatPrice(unitPrice)}</span>
+            <span
+              className={`text-2xl font-semibold ${product.compare_at_price ? "text-alert" : ""}`}
+            >
+              {formatPrice(unitPrice)}
+            </span>
             {product.compare_at_price ? (
               <span className="text-base text-muted-foreground line-through">
                 {formatPrice(Number(product.compare_at_price))}
               </span>
             ) : null}
           </div>
-          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+          <p
+            className={`mt-2 text-[11px] font-semibold uppercase tracking-[0.25em] ${
+              soldOut || product.stock < 11 ? "text-alert" : "text-muted-foreground"
+            }`}
+          >
             {soldOut ? "Sold out" : `${product.stock} in stock`}
           </p>
 
           {groups.map((group) => (
-            <div key={group.name} className="mt-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.25em]">{group.name}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
+            <details key={group.name} className="mt-4 border border-border">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.25em]">
+                  {group.name}
+                </span>
+                <span className="flex items-center gap-2 text-xs text-muted-foreground">
+                  {selection[group.name] ?? "Select"}
+                  <ChevronDown className="size-4" />
+                </span>
+              </summary>
+              <div className="flex flex-wrap gap-2 border-t border-border p-4">
                 {group.options.map((option) => {
                   const isActive = selection[group.name] === option.option_value;
-                  const unavailable = option.stock <= 0;
                   return (
                     <button
                       key={option.id}
-                      disabled={unavailable}
                       onClick={() =>
                         setSelection((prev) => ({ ...prev, [group.name]: option.option_value }))
                       }
                       className={`border px-4 py-2 text-xs uppercase tracking-[0.15em] ${
                         isActive ? "border-foreground bg-foreground text-background" : "border-border"
-                      } ${unavailable ? "cursor-not-allowed line-through opacity-40" : ""}`}
+                      }`}
                     >
                       {option.option_value}
                       {Number(option.price_delta) !== 0
@@ -196,8 +211,9 @@ function ProductPage() {
                   );
                 })}
               </div>
-            </div>
+            </details>
           ))}
+
 
           {product.description && (
             <p className="mt-6 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
