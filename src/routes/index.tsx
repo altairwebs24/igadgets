@@ -38,7 +38,7 @@ function Home() {
     <div>
       <section className="relative h-[78vh] min-h-[520px] w-full overflow-hidden bg-foreground">
         <AutoVideo
-          src={heroVideo.url}
+          src={heroVideo.mp4}
           className="absolute inset-0 size-full object-cover opacity-60"
         />
         <div className="relative z-10 flex size-full flex-col items-center justify-center px-6 text-center">

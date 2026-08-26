@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/cart";
@@ -15,7 +16,16 @@ type OrderRow = {
 
 type ItemRow = { name: string; quantity: number; unit_price: number; order_id: string };
 
+const RANGES = [
+  { label: "1 month", months: 1 },
+  { label: "3 months", months: 3 },
+  { label: "6 months", months: 6 },
+  { label: "12 months", months: 12 },
+] as const;
+
 export function InsightsAdmin() {
+  const [rangeMonths, setRangeMonths] = useState<number>(12);
+  const rangeLabel = RANGES.find((range) => range.months === rangeMonths)?.label ?? "12 months";
   const { data: products = [] } = useQuery(productsQuery);
 
   const { data: orders = [], isLoading } = useQuery({
@@ -88,18 +98,46 @@ export function InsightsAdmin() {
     .sort((a, b) => a.stock - b.stock)
     .slice(0, 5);
 
-  const visitors = new Set(visits.map((visit) => visit.session_id)).size;
+  const rangeStart = Date.now() - rangeMonths * 30 * 24 * 60 * 60 * 1000;
+  const visitsInRange = visits.filter(
+    (visit) => new Date(visit.created_at).getTime() >= rangeStart,
+  );
+  const visitors = new Set(visitsInRange.map((visit) => visit.session_id)).size;
   const visitors30 = new Set(
     visits
       .filter((visit) => new Date(visit.created_at).getTime() >= since)
       .map((visit) => visit.session_id),
   ).size;
-  const visitToOrder = visitors ? (orders.length / visitors) * 100 : 0;
+  const ordersInRange = orders.filter(
+    (order) => new Date(order.created_at).getTime() >= rangeStart,
+  );
+  const visitToOrder = visitors ? (ordersInRange.length / visitors) * 100 : 0;
+
+  // Monthly visitor breakdown, oldest → newest, over the selected window.
+  const monthly = Array.from({ length: rangeMonths }, (_, index) => {
+    const date = new Date();
+    date.setDate(1);
+    date.setMonth(date.getMonth() - (rangeMonths - 1 - index));
+    const key = `${date.getFullYear()}-${date.getMonth()}`;
+    const sessions = new Set(
+      visits
+        .filter((visit) => {
+          const at = new Date(visit.created_at);
+          return `${at.getFullYear()}-${at.getMonth()}` === key;
+        })
+        .map((visit) => visit.session_id),
+    );
+    return {
+      label: date.toLocaleDateString("en-ZA", { month: "short", year: "2-digit" }),
+      visitors: sessions.size,
+    };
+  });
+  const peak = Math.max(1, ...monthly.map((month) => month.visitors));
 
   const cards = [
-    { label: "Site visitors", value: String(visitors) },
+    { label: `Site visitors (${rangeLabel})`, value: String(visitors) },
     { label: "Visitors (30 days)", value: String(visitors30) },
-    { label: "Page opens", value: String(visits.length) },
+    { label: "Page opens", value: String(visitsInRange.length) },
     { label: "Visit → order rate", value: `${visitToOrder.toFixed(1)}%` },
     { label: "Revenue (paid)", value: formatPrice(revenue) },
     { label: "Last 30 days", value: formatPrice(revenue30) },
@@ -111,6 +149,22 @@ export function InsightsAdmin() {
 
   return (
     <div className="space-y-10">
+      <div className="flex flex-wrap gap-2">
+        {RANGES.map((range) => (
+          <button
+            key={range.months}
+            onClick={() => setRangeMonths(range.months)}
+            className={`border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] ${
+              rangeMonths === range.months
+                ? "border-foreground bg-foreground text-background"
+                : "border-border text-muted-foreground"
+            }`}
+          >
+            {range.label}
+          </button>
+        ))}
+      </div>
+
       <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
           <div key={card.label} className="bg-background p-6">
@@ -121,6 +175,26 @@ export function InsightsAdmin() {
           </div>
         ))}
       </div>
+
+      <section className="border border-border">
+        <h3 className="border-b border-border p-4 text-[11px] font-semibold uppercase tracking-[0.3em]">
+          Website views — last {rangeLabel}
+        </h3>
+        <div className="flex items-end gap-2 overflow-x-auto p-6" style={{ height: 220 }}>
+          {monthly.map((month) => (
+            <div key={month.label} className="flex min-w-10 flex-1 flex-col items-center gap-2">
+              <span className="text-[10px] font-semibold">{month.visitors}</span>
+              <div
+                className="w-full bg-foreground"
+                style={{ height: `${Math.max(2, (month.visitors / peak) * 130)}px` }}
+              />
+              <span className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
+                {month.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section className="border border-border">
