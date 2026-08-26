@@ -88,13 +88,41 @@ export function InsightsAdmin() {
     .sort((a, b) => a.stock - b.stock)
     .slice(0, 5);
 
-  const visitors = new Set(visits.map((visit) => visit.session_id)).size;
+  const rangeStart = Date.now() - rangeMonths * 30 * 24 * 60 * 60 * 1000;
+  const visitsInRange = visits.filter(
+    (visit) => new Date(visit.created_at).getTime() >= rangeStart,
+  );
+  const visitors = new Set(visitsInRange.map((visit) => visit.session_id)).size;
   const visitors30 = new Set(
     visits
       .filter((visit) => new Date(visit.created_at).getTime() >= since)
       .map((visit) => visit.session_id),
   ).size;
-  const visitToOrder = visitors ? (orders.length / visitors) * 100 : 0;
+  const ordersInRange = orders.filter(
+    (order) => new Date(order.created_at).getTime() >= rangeStart,
+  );
+  const visitToOrder = visitors ? (ordersInRange.length / visitors) * 100 : 0;
+
+  // Monthly visitor breakdown, oldest → newest, over the selected window.
+  const monthly = Array.from({ length: rangeMonths }, (_, index) => {
+    const date = new Date();
+    date.setDate(1);
+    date.setMonth(date.getMonth() - (rangeMonths - 1 - index));
+    const key = `${date.getFullYear()}-${date.getMonth()}`;
+    const sessions = new Set(
+      visits
+        .filter((visit) => {
+          const at = new Date(visit.created_at);
+          return `${at.getFullYear()}-${at.getMonth()}` === key;
+        })
+        .map((visit) => visit.session_id),
+    );
+    return {
+      label: date.toLocaleDateString("en-ZA", { month: "short", year: "2-digit" }),
+      visitors: sessions.size,
+    };
+  });
+  const peak = Math.max(1, ...monthly.map((month) => month.visitors));
 
   const cards = [
     { label: "Site visitors", value: String(visitors) },
