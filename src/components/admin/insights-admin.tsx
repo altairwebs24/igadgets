@@ -149,6 +149,22 @@ export function InsightsAdmin() {
 
   return (
     <div className="space-y-10">
+      <div className="flex flex-wrap gap-2">
+        {RANGES.map((range) => (
+          <button
+            key={range.months}
+            onClick={() => setRangeMonths(range.months)}
+            className={`border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] ${
+              rangeMonths === range.months
+                ? "border-foreground bg-foreground text-background"
+                : "border-border text-muted-foreground"
+            }`}
+          >
+            {range.label}
+          </button>
+        ))}
+      </div>
+
       <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
           <div key={card.label} className="bg-background p-6">
