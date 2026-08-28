@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as TrackRouteImport } from './routes/track'
 import { Route as CheckoutIndexRouteImport } from './routes/checkout.index'
@@ -39,6 +40,11 @@ const AuthRoute = AuthRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/search': typeof SearchRoute
   '/track': typeof TrackRoute
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/search': typeof SearchRoute
   '/track': typeof TrackRoute
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/search': typeof SearchRoute
   '/track': typeof TrackRoute
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/cart'
+    | '/refund-policy'
     | '/search'
     | '/track'
     | '/checkout/success'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/cart'
+    | '/refund-policy'
     | '/search'
     | '/track'
     | '/checkout/success'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/cart'
+    | '/refund-policy'
     | '/search'
     | '/track'
     | '/checkout/success'
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   SearchRoute: typeof SearchRoute
   TrackRoute: typeof TrackRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
@@ -201,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -260,6 +280,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   SearchRoute: SearchRoute,
   TrackRoute: TrackRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
