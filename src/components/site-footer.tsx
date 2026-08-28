@@ -33,7 +33,9 @@ export function SiteFooter() {
             Store
           </h2>
           <ul className="mt-4 space-y-2">
-            <li>Payments coming soon</li>
+            <li>
+              <Link to="/refund-policy">7-day refund policy</Link>
+            </li>
             <li>
               <Link to="/auth">Staff login</Link>
             </li>
